@@ -1,4 +1,4 @@
-# Nested confidence-sequence experiments
+# Anytime-Valid Prediction-Powered Active Evaluation of Large Language Models
 
 **FAQ predictor source:** the factor-predictor initialization and sequential
 Laplace updates are adapted from [Skyler Wu et al.'s efficiently-evaluating-llms
