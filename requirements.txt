@@ -1,0 +1,5 @@
+# Replot the supplied results; PyTorch is not required for this workflow.
+numpy==2.2.6
+pandas==2.3.3
+matplotlib==3.10.7
+scipy==1.15.3

@@ -1,0 +1,114 @@
+{
+  "schema_version": 2,
+  "figures": [
+    "stopping_time_z123",
+    "width_z123",
+    "one_step_mae_z123",
+    "one_step_kl_query_z123",
+    "stopping_time_paired_z123",
+    "validity_through_t",
+    "validity_summary",
+    "width_vs_theory_rate_combined",
+    "stopping_time_m2_comparison",
+    "width_m2_comparison",
+    "coverage_m2_comparison",
+    "one_step_kl_query_m2_comparison",
+    "one_step_mae_m2_comparison",
+    "cumulative_kl_query_m2_comparison",
+    "cumulative_mae_m2_comparison",
+    "validity_tilde_z2_bet_uniform_r800"
+  ],
+  "figure_files": {
+    "stopping_time_z123": {
+      "pdf": "main_figure/2_stopping_time_z123.pdf",
+      "png": "main_figure/2_stopping_time_z123.png"
+    },
+    "width_z123": {
+      "pdf": "appendix_figure/3_CS_width_z123.pdf",
+      "png": "appendix_figure/3_CS_width_z123.png"
+    },
+    "one_step_mae_z123": {
+      "pdf": "appendix_figure/4_one_step_mae_z123.pdf",
+      "png": "appendix_figure/4_one_step_mae_z123.png"
+    },
+    "one_step_kl_query_z123": {
+      "pdf": "appendix_figure/5_one_step_kl_query_z123.pdf",
+      "png": "appendix_figure/5_one_step_kl_query_z123.png"
+    },
+    "stopping_time_paired_z123": {
+      "pdf": "appendix_figure/6_stopping_time_paired_z123.pdf",
+      "png": "appendix_figure/6_stopping_time_paired_z123.png"
+    },
+    "validity_through_t": {
+      "pdf": "appendix_figure/9_validity_through_t.pdf",
+      "png": "appendix_figure/9_validity_through_t.png"
+    },
+    "validity_summary": {
+      "pdf": "figures/validity_summary.pdf",
+      "png": "figures/validity_summary.png"
+    },
+    "width_vs_theory_rate_combined": {
+      "pdf": "main_figure/1_width_vs_theory_rate.pdf",
+      "png": "main_figure/1_width_vs_theory_rate.png"
+    },
+    "stopping_time_m2_comparison": {
+      "pdf": "appendix_figure/7_stopping_time_m2_comparison.pdf",
+      "png": "appendix_figure/7_stopping_time_m2_comparison.png"
+    },
+    "width_m2_comparison": {
+      "pdf": "figures/width_m2_comparison.pdf",
+      "png": "figures/width_m2_comparison.png"
+    },
+    "coverage_m2_comparison": {
+      "pdf": "figures/coverage_m2_comparison.pdf",
+      "png": "figures/coverage_m2_comparison.png"
+    },
+    "one_step_kl_query_m2_comparison": {
+      "pdf": "figures/one_step_kl_query_m2_comparison.pdf",
+      "png": "figures/one_step_kl_query_m2_comparison.png"
+    },
+    "one_step_mae_m2_comparison": {
+      "pdf": "appendix_figure/8_one_step_mae_m2_comparison.pdf",
+      "png": "appendix_figure/8_one_step_mae_m2_comparison.png"
+    },
+    "cumulative_kl_query_m2_comparison": {
+      "pdf": "figures/cumulative_kl_query_m2_comparison.pdf",
+      "png": "figures/cumulative_kl_query_m2_comparison.png"
+    },
+    "cumulative_mae_m2_comparison": {
+      "pdf": "figures/cumulative_mae_m2_comparison.pdf",
+      "png": "figures/cumulative_mae_m2_comparison.png"
+    },
+    "validity_tilde_z2_bet_uniform_r800": {
+      "pdf": "appendix_figure/10_validity_tilde_z2_bet_uniform_r800.pdf",
+      "png": "appendix_figure/10_validity_tilde_z2_bet_uniform_r800.png"
+    }
+  },
+  "paths_relative_to": "output root",
+  "source_hashes": {
+    "comparison": {
+      "comparison/step_summary.csv.gz": "ba6e4761e3eb5e74abd6472c8b785a50fb8f3a674a0c809d674d5e4ec931158b",
+      "comparison/stopping_summary.csv.gz": "9cf43fb8434b67a338b49a27112a21f81b08ee25d61d81b5c5cf345e15db8316"
+    },
+    "validity": {
+      "validity/step_summary.csv.gz": "97c597e63827f29de5d61d4283ac07564589ec3452f9a0d4b25082905bfff393",
+      "validity/stopping_summary.csv.gz": "1a13b40787700b9fed9bed008703b7f77db2ebb2bf8d212d3c0b918c87a80acf"
+    },
+    "mismatch": {
+      "mismatch/step_summary.csv.gz": "1091161618c332fe3677e78f26c0c7d992b165e1b4740b507892ef311984ba3b",
+      "mismatch/stopping_summary.csv.gz": "bf8954b3b51e31bada30a453d802508c1f490642144771592f2e51cfa39c7963"
+    },
+    "m2_comparison": {
+      "m2_comparison/step_summary.csv.gz": "70ebc54bb969e8fa7c390b6b9a80deca8e34990fbddebede655c47578f1bed45",
+      "m2_comparison/stopping_summary.csv.gz": "eef424118960093953a024dee6b3f9d265173f3e3a59419fc0dd807502861d4d"
+    },
+    "validity_r800": {
+      "validity_r800/step_summary.csv.gz": "3b4b4ace36169fb12cb01d87cc42e8a80cd87b0a065290e056941719de0f10ca",
+      "validity_r800/stopping_summary.csv.gz": "7d765ef488ddf74a03ae43a849401caecf02f6d71b8e8ef3fbd85a5cffc6b124",
+      "validity_r800/repeat_coverage.csv": "a969bf8b515e88f2eebd16c7d226bb4351dde8ffe94a2e030cfc4be81b11b087"
+    }
+  },
+  "uncertainty": "+/-1 SE; pointwise 95% Clopper-Pearson Monte Carlo intervals for coverage",
+  "theory": "Rate guides normalized to empirical width at the recorded anchor; not numerical bounds",
+  "plots_include_paper_captions": false
+}

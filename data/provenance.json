@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "inputs": {
+    "benchmark_5000": {
+      "source": "data/synthetic/fixed_z_mmlu_pro_5000_with_similar_m2_row1",
+      "source_manifest_sha256": "05ef846498c301d387146496e2c375dd220271579b77d7925e9d7033307a3a4c"
+    },
+    "m2_row_0483": {
+      "source": "data/mmlu_pro_m2_similar_row1_5000",
+      "source_manifest_sha256": "0db6a342c0b0ed0e6d0951fc01f3fac64645819311478a4b6e86f6c206f3249a"
+    },
+    "m2_row_1183": {
+      "source": "data/mmlu_pro_m2_farthest_row1_5000",
+      "source_manifest_sha256": "6dd9255f2142870e2214b1051da59b19b8dee10087165df8a139d2addec4fb28"
+    },
+    "m2_row_1506": {
+      "source": "data/mmlu_pro_m2_mean_pair_5000/m2_row_1506",
+      "source_manifest_sha256": "aaedd71c52d84961a1dbfa49249c4a202c1af4326b187c3c309a17e76f9b64d1"
+    },
+    "m2_row_0542": {
+      "source": "data/mmlu_pro_m2_mean_pair_5000/m2_row_0542",
+      "source_manifest_sha256": "e9414bbf78d13acff90c2f7b06edb462fe039087b973f1d10a5e5d1d963b9e2d"
+    }
+  },
+  "experiments": {
+    "comparison": {
+      "source_results": "logs/synthetic/nested_comparison_5000_parts",
+      "n_cases": 48,
+      "n_step_rows": 240000,
+      "n_stopping_rows": 240,
+      "retained_metrics": [
+        "width",
+        "anytime_covered",
+        "empty_cs",
+        "mae_z",
+        "kl_z_query"
+      ],
+      "data_kind": "pooled per-step means and standard errors; no per-repeat raw trajectories in this bundle",
+      "source_runs_file": "comparison/source_runs.json"
+    },
+    "validity": {
+      "source_results": "logs/synthetic/nested_validity_r300_parts",
+      "n_cases": 24,
+      "n_step_rows": 12000,
+      "n_stopping_rows": 120,
+      "retained_metrics": [
+        "width",
+        "anytime_covered",
+        "empty_cs",
+        "mae_z",
+        "kl_z_query"
+      ],
+      "data_kind": "pooled per-step means and standard errors; no per-repeat raw trajectories in this bundle",
+      "source_runs_file": "validity/source_runs.json"
+    },
+    "mismatch": {
+      "source_results": "logs/synthetic/nested_mismatch_m2_5000_a0p9_c0p7_parts",
+      "n_cases": 8,
+      "n_step_rows": 40000,
+      "n_stopping_rows": 40,
+      "retained_metrics": [
+        "width",
+        "anytime_covered",
+        "empty_cs",
+        "mae_z",
+        "kl_z_query"
+      ],
+      "data_kind": "pooled per-step means and standard errors; no per-repeat raw trajectories in this bundle",
+      "source_runs_file": "mismatch/source_runs.json"
+    },
+    "m2_comparison": {
+      "source_results": [
+        "logs/synthetic/nested_m2_farthest_row1_5000_parts",
+        "logs/synthetic/nested_m2_mean_pair_5000_parts",
+        "logs/synthetic/nested_m2_similar_row1_5000_parts"
+      ],
+      "n_cases": 32,
+      "n_models": 4,
+      "n_repeats": 20,
+      "n_step_rows": 160000,
+      "n_stopping_rows": 160,
+      "model_rows_in_panel_order": [
+        1183,
+        1506,
+        483,
+        542
+      ],
+      "mean_pair_model_rows": [
+        1506,
+        542
+      ],
+      "retained_metrics": [
+        "width",
+        "anytime_covered",
+        "empty_cs",
+        "mae_z",
+        "kl_z_query",
+        "cum_mae_z",
+        "cum_kl_z_query",
+        "brier_z"
+      ],
+      "data_kind": "Per-step and per-threshold means and standard errors; models are plotted separately; raw per-repeat trajectories are not distributed",
+      "source_runs_file": "m2_comparison/source_runs.json",
+      "models_file": "m2_comparison/models.csv",
+      "all_model_inputs_match_originals": true
+    },
+    "validity_r800": {
+      "source_results": "logs/synthetic/validity_tilde_z2_bet_uniform_r800",
+      "n_cases": 1,
+      "n_repeats": 800,
+      "horizon": 500,
+      "scenario": "tilde_z_2",
+      "method": "bet_uniform",
+      "predictor": "faq",
+      "n_step_rows": 500,
+      "n_stopping_rows": 5,
+      "data_kind": "Original per-step/per-threshold summaries plus the first true-candidate exclusion time for each repeat",
+      "repeat_coverage_file": "validity_r800/repeat_coverage.csv",
+      "repeat_coverage_encoding": "first_exclusion_step=-1 means the true candidate survived all 500 recorded steps; otherwise it first disappears at the recorded step",
+      "raw_trajectory_rows_verified": 400000,
+      "source_runs_file": "validity_r800/source_runs.json",
+      "source_step_summary_sha256": "76740eb67532271a518485d9d58072d64671e76a5b4ceb73ce2e98442f7f61ad",
+      "source_raw_steps_sha256": "f1a119d5ca1c99efee83b6734d78f2b4366dccf98538180c000750a7804d9bd0",
+      "overlap_note": "Repeats 0-299 reuse the old 300-repeat experiment streams; these results are not pooled with that experiment.",
+      "original_runner_and_packaged_inputs_match": true
+    }
+  },
+  "scenario_names": {
+    "legacy_to_paper": {
+      "small_similar": "z_1",
+      "small_medium": "z_2",
+      "small_high": "z_3",
+      "large_similar": "tilde_z_1",
+      "large_medium": "tilde_z_2",
+      "large_high": "tilde_z_3"
+    },
+    "random_stream_ids": {
+      "z_1": 4,
+      "z_2": 2,
+      "z_3": 0,
+      "tilde_z_1": 5,
+      "tilde_z_2": 3,
+      "tilde_z_3": 1
+    },
+    "note": "Only identities/filenames changed; labels, numerical summaries and random streams are preserved. Original source run paths/names remain in provenance."
+  },
+  "faq_predictor_source": "https://github.com/skbwu/efficiently-evaluating-llms"
+}

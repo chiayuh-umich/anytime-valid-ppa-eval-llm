@@ -1,0 +1,157 @@
+{
+  "checked": "2026-09-29",
+  "numerical_parity": {
+    "methods": [
+      "ripr_uniform",
+      "ripr_maxmin",
+      "ripr_maxmax",
+      "bet_uniform",
+      "bet_maxmin",
+      "bet_maxmax",
+      "hedged_uniform",
+      "hedged_wor"
+    ],
+    "oracle_kappas": [
+      0,
+      0.5,
+      1
+    ],
+    "oracle_families": [
+      "ripr",
+      "bet"
+    ],
+    "population_size": 12,
+    "repeats": 3,
+    "horizon": 12,
+    "optimizer_steps": 2,
+    "comparison": "all trajectory fields and candidate elimination times exactly equal to legacy runner on CPU"
+  },
+  "portability": {
+    "original_project_imports_required": false,
+    "redraw_without_torch": true,
+    "figures_redrawn": 8,
+    "cli_preparation_explicit_rows": true,
+    "cli_preparation_farthest": true,
+    "cli_faq_all_methods": true,
+    "cli_oracle": true,
+    "cli_custom_predictor": true,
+    "cli_diagnostic_plot": true
+  },
+  "full_experiments_rerun": false,
+  "input_data": "All packaged labels and predictor NPZ files byte-identical to originals",
+  "summary_data": "Numerical summary values are unchanged; scenario names use the documented legacy-to-paper mapping. Fresh exports agree exactly with packaged tables.",
+  "packaged_source_sha256": {
+    "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b",
+    "reproduce_figures.py": "ceef972ad9b8181a224b5fe1ba8ed69c9318d39cac167a4f7d153a19df5ccd8c"
+  },
+  "consolidated_from_sha256": {
+    "nested_fixed_z_experiment.py": "75acfc817ef1710a688ebaa5c81b9065bb2d4262da3014ee699d9f2bd772ac34",
+    "nested_m2_experiment.py": "6ca677e9aeed54e740e8ac694de0df5eea541725dce988333ab7463937965e69",
+    "nested_m2_benchmark.py": "1b87532795ab44988d4aebbd9184c7cf34d1aac79a9fa3cd80991d0ebf49c787",
+    "fixed_z_experiment.py": "a277378744e090ae63b9b12e170c99f9ced044a09f412f1f381bd18343ea2815",
+    "ideal_fixed_z_experiment.py": "244aeb75a6e7abf88ff35457b6ef892f8f9adda0f94eb0300bf4eab542a61b38",
+    "querying_rules.py": "27fc94a4fdc7103d5d9cd4e87bc0b391ba0bd42dd1a3bcedfbc231f60919c782",
+    "mixture_ripr_cs_final.py": "755316138ec399dc342cb13ed0d83ba4838e2fb43bc1793f8d3c0e8241561e22",
+    "mixture_bet_cs_final.py": "1d6ca6c3a266da1f26e14bb9acc5f3b41041986683b3044f3ed4fe922fc7da37",
+    "hedged_cs.py": "c0da3e9e3a1dfe3f6eb06f9aa8957ef76abae4256f75a2fe7bfd9a1ac884965b",
+    "plot_ideal_width_theory.py": "bb326f63cb8d36c41f3fa98e8d8184536b7f42f1f2bd0c721392a60fdacd1acd"
+  },
+  "renaming_and_export": {
+    "faq_initialization_and_updates_unchanged": true,
+    "six_ground_truth_vectors_unchanged": true,
+    "all_scenario_random_streams_unchanged": true,
+    "legacy_data_and_cli_aliases_tested": true,
+    "all_eight_methods_cli_tested": true,
+    "exported_tables_equal_packaged_tables_exactly": true,
+    "eight_figures_from_fresh_export": true,
+    "full_experiments_rerun": false
+  },
+  "m2_comparison_extension": {
+    "checked": "2026-09-30",
+    "data_validation": {
+      "runs_verified": 32,
+      "stopping_points_verified_from_raw_repeats": 160,
+      "step_rows_verified": 160000,
+      "bundled_data_files": 35
+    },
+    "portability": {
+      "isolated_all_figures": 15,
+      "plotting_with_torch_and_runner_imports_blocked": true,
+      "pngs_identical_to_package": true
+    },
+    "model_rows": [
+      1183,
+      1506,
+      483,
+      542
+    ],
+    "panels": [
+      2,
+      2
+    ],
+    "direct_multi_directory_plot_matches_export": true,
+    "duplicate_repeat_rejection": true,
+    "full_simulations_rerun": false,
+    "numerical_simulation_algorithms_changed": false,
+    "export_changes": "Multiple result roots, preserved M2 metadata, additional compact metric columns",
+    "source_provenance_uses_relative_paths": true,
+    "mismatch_plots": {
+      "figures": 4,
+      "riPr_metric": "query-weighted KL",
+      "betting_metric": "uniform population MAE",
+      "time_convention": "pre-query predictor r_(t-1)",
+      "cumulative_means_verified_against_one_step_sums": true,
+      "checked_curves": 24,
+      "cumulative_se": "recorded SE of per-repeat cumulative loss",
+      "experiments_rerun": false
+    }
+  },
+  "validity_r800_extension": {
+    "checked": "2026-10-01",
+    "scenario": "tilde_z_2",
+    "method": "bet_uniform",
+    "n_repeats": 800,
+    "horizon": 500,
+    "raw_trajectory_rows_verified": 400000,
+    "raw_coverage_equals_cumulative_membership": true,
+    "first_exclusion_table_reconstructs_all_500_points": true,
+    "terminal_covered_count": 763,
+    "terminal_coverage": 0.95375,
+    "all_original_standalone_numeric_values_unchanged": true,
+    "recorded_runner_source_and_inputs_match_package": true,
+    "new_results_cli_matches_bundled_plot": true,
+    "corrupted_repeat_coverage_rejected": true,
+    "isolated_all_figures_redrawn": 16,
+    "isolated_plotting_with_torch_and_runner_imports_blocked": true,
+    "all_pngs_identical_to_package": true,
+    "bundled_data_files": 39,
+    "source_paths_portable": true,
+    "simulations_rerun": false,
+    "numerical_simulation_algorithms_changed": false
+  },
+  "paper_figure_layout": {
+    "checked": "2026-10-01",
+    "paper_figures": 10,
+    "main_figures": 2,
+    "appendix_figures": 8,
+    "all_numbered_pdfs_byte_identical_to_user_references": true,
+    "all_16_pdf_and_png_outputs_unchanged_except_paths": true,
+    "reproduced_in_isolated_directory_with_no_reference_figures": true,
+    "plotting_with_torch_and_runner_imports_blocked": true,
+    "invocation_from_outside_package_verified": true,
+    "custom_output_root_and_single_group_verified": true,
+    "source_data_and_simulation_code_unchanged": true,
+    "numbered_pdf_sha256": {
+      "main_figure/1_width_vs_theory_rate.pdf": "d912acaab0bc66ccaeed9db9f545cbf6a7c1711c45b06222eef7364bf2305038",
+      "main_figure/2_stopping_time_z123.pdf": "e2fdac68483f59d0803d54ecd5af8a43cb67b88adbd3cae45415f8f338b4e56e",
+      "appendix_figure/6_stopping_time_paired_z123.pdf": "35667906f4e07b4629b11dbadb3be6cf3b58a4f23c4a64901112119c4a4c866c",
+      "appendix_figure/7_stopping_time_m2_comparison.pdf": "5fe1a70ddb40522b02f692cf2f3b8b6da79a4d6a6212531143f13c8527c46a1c",
+      "appendix_figure/9_validity_through_t.pdf": "01c9bcf8c9019ca16c14cfc972beebc328d35c166b6d3dae61a38c944f0af39b",
+      "appendix_figure/10_validity_tilde_z2_bet_uniform_r800.pdf": "48b87147bfff176e3fa43214acb1680edec66e7b8db38c06632785e40293aeda",
+      "appendix_figure/3_CS_width_z123.pdf": "a2c01ad1293377defeec004e8fb241ee845f8610c6b22a9e3dd67dfb21ce527e",
+      "appendix_figure/8_one_step_mae_m2_comparison.pdf": "96432435a0f55df99edaf069c2609fe318224f3349d9e72bb139fe0c6568750c",
+      "appendix_figure/4_one_step_mae_z123.pdf": "b0cc21265735e6272e11a3d55eabf327f25f148ae8be5febee7613a407688fff",
+      "appendix_figure/5_one_step_kl_query_z123.pdf": "310c96084cabc6de74a6871f8db5e86c4ffe22052503a182b1809fece90aa670"
+    }
+  }
+}

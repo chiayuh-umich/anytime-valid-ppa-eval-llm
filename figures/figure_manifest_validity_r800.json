@@ -1,0 +1,23 @@
+{
+  "figures": [
+    "validity_tilde_z2_bet_uniform_r800"
+  ],
+  "source_hashes": {
+    "validity_r800": {
+      "validity_r800/step_summary.csv.gz": "3b4b4ace36169fb12cb01d87cc42e8a80cd87b0a065290e056941719de0f10ca",
+      "validity_r800/stopping_summary.csv.gz": "7d765ef488ddf74a03ae43a849401caecf02f6d71b8e8ef3fbd85a5cffc6b124",
+      "validity_r800/repeat_coverage.csv": "a969bf8b515e88f2eebd16c7d226bb4351dde8ffe94a2e030cfc4be81b11b087"
+    }
+  },
+  "uncertainty": "+/-1 SE; pointwise 95% Clopper-Pearson Monte Carlo intervals for coverage",
+  "theory": "Rate guides normalized to empirical width at the recorded anchor; not numerical bounds",
+  "plots_include_paper_captions": false,
+  "schema_version": 2,
+  "paths_relative_to": "output root",
+  "figure_files": {
+    "validity_tilde_z2_bet_uniform_r800": {
+      "pdf": "appendix_figure/10_validity_tilde_z2_bet_uniform_r800.pdf",
+      "png": "appendix_figure/10_validity_tilde_z2_bet_uniform_r800.png"
+    }
+  }
+}

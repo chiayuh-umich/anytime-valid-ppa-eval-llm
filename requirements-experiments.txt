@@ -1,0 +1,4 @@
+-r requirements.txt
+# Required only to simulate new experiments. Use an appropriate CUDA wheel
+# on a GPU machine; the figures do not require a GPU.
+torch==2.9.0
