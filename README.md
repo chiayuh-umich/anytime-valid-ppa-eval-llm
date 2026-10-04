@@ -1,4 +1,4 @@
-# Anytime-Valid Prediction-Powered Active Evaluation of Large Language Models
+# Nested confidence-sequence experiments
 
 **FAQ predictor source:** the factor-predictor initialization and sequential
 Laplace updates are adapted from [Skyler Wu et al.'s efficiently-evaluating-llms
@@ -27,7 +27,7 @@ There are two workflows:
 nested_reproduction/
   README.md
   nested_experiment.py          All simulation and numerical solver code
-  reproduce_figures.py          Original plots, M2 comparisons and r800 validity
+  reproduce_figures.py          Paper plots, both M2 suites and r800 validity
   requirements.txt             Plotting dependencies
   requirements-experiments.txt Simulation dependencies
   verification.json           Executed checks and source-code hashes
@@ -43,11 +43,13 @@ nested_reproduction/
     validity_r800/             Standalone tilde_z_2 / betting uniform: 800 repeats
     mismatch/                  Recorded summaries: 20 repeats, 5000 steps
     m2_comparison/              Four real M2 models: 20 repeats, 5000 steps
+    bbh_m2_comparison/          Combined-suite comparison summaries and model list
+    bbh_m2_5000/                Four labels, aligned FAQ snapshot and question map
     initial_mismatch.csv       Initial means, MAE, Brier and KL
     provenance.json            Sources and retained data definitions
     checksums.json             SHA-256 hashes of all distributed data files
   main_figure/                 Paper Figures 1--2, numbered PDF and PNG files
-  appendix_figure/             Paper Figures 3--10, numbered PDF and PNG files
+  appendix_figure/             Figures 3--10 and three combined-suite comparisons
   figures/                    Additional diagnostics, numeric tables and metadata
 ```
 
@@ -92,7 +94,9 @@ command redraws **10 numbered paper figures** directly into `main_figure/` and
 `appendix_figure/`, using the filenames below. Each PDF also has a PNG with the
 same stem. The numbering is fixed in the script: the output folders need not
 already contain any figures. Running it again overwrites the matching output
-files. Six additional diagnostic plots and the numeric tables go in `figures/`.
+files. Three further combined-suite plots are also written to `appendix_figure/`
+with descriptive filenames (paper numbers have not yet been assigned). Six
+additional diagnostic plots and the numeric tables go in `figures/`.
 It uses a headless Matplotlib backend; LaTeX and PyTorch are not needed.
 
 | Paper figure | PDF output relative to this directory | Content |
@@ -107,6 +111,9 @@ It uses a headless Matplotlib backend; LaTeX and PyTorch are not needed.
 | 8 | `appendix_figure/8_one_step_mae_m2_comparison.pdf` | One-step MAE for the four M2 models, betting methods only |
 | 9 | `appendix_figure/9_validity_through_t.pdf` | Coverage through each time, four panels, 300 repeats |
 | 10 | `appendix_figure/10_validity_tilde_z2_bet_uniform_r800.pdf` | Betting uniform on tilde z_2 only, 800 repeats, 500 steps |
+| Unnumbered | `appendix_figure/stopping_time_bbh_m2_comparison.pdf` | Combined-suite capped stopping queries, four models |
+| Unnumbered | `appendix_figure/one_step_kl_query_bbh_m2_comparison.pdf` | Combined-suite RIPr one-step query-weighted KL |
+| Unnumbered | `appendix_figure/one_step_mae_bbh_m2_comparison.pdf` | Combined-suite betting one-step population MAE |
 
 The six additional plot stems under `figures/` are `validity_summary`,
 `width_m2_comparison`, `coverage_m2_comparison`, `one_step_kl_query_m2_comparison`,
@@ -266,6 +273,76 @@ across repeats; the cumulative standard errors come from the per-repeat
 cumulative losses, not sums of one-step standard errors. All curves use every
 recorded step and are shown on linear axes. Hedged baselines have no
 per-question predictor and are omitted from the mismatch figures.
+
+## Combined suite: BBH + GPQA + IFEval + MATH + MuSR
+
+Redraw only the three added comparisons, using the bundled summaries:
+
+```bash
+python reproduce_figures.py --only bbh_m2_comparison
+```
+
+The three filenames are listed above; each is saved as PDF and PNG inside
+`appendix_figure/`. They are also included in the default all-figures command.
+The layout is 2 × 2, ordered by increasing **initial mismatch**, not accuracy:
+
+| M2 row (zero-based) | Target mean | Initial MAE | Initial KL |
+| --- | --- | --- | --- |
+| 788 | 0.4310 | 0.222748 | 0.479535 |
+| 1752 | 0.3808 | 0.262403 | 0.647396 |
+| 1516 | 0.5788 | 0.315054 | 0.898132 |
+| 729 | 0.2686 | 0.361424 | 1.140743 |
+
+All four correctness vectors and question factors share the **same sampled
+5000 questions** from the full 9574-question suite. Sampling was proportional,
+stratified by benchmark, without replacement, with NumPy seed 0: BBH 3009,
+GPQA 622, IFEval 283, MATH 691, and MuSR 395. The question order is the sorted
+original source order. This is not the first 5000 stored questions. The target
+mean refers to the fixed sampled population. The initial predictor mean is
+approximately 0.391713. Models were selected near the 10th, 35th, 65th and
+90th percentiles of initial population MAE, before inspecting CS outcomes.
+
+`data/bbh_m2_comparison/` contains summary means and standard errors from
+32 completed model/method runs, their portable configurations, and `models.csv`.
+Each run has 20 repeats, 5000 queries and alpha 0.05. No raw per-repeat
+trajectories are needed for redrawing these three figures. Stopping times
+are capped at 5000, with epsilon values 0.05, 0.075, 0.1, 0.125 and 0.15.
+Shading is mean ±1 standard error; hollow stopping markers indicate that
+some repeats failed to reach the target. The KL plot includes only RIPr and
+uses query weights q_t; the MAE plot includes only betting and uses uniform
+population weights 1/N. Both losses use the predictor before query t.
+
+`data/bbh_m2_5000/` contains the four original label vectors, the aligned
+FAQ predictor snapshot, the question map, and selection metadata. These
+files suffice to rerun the experiments without the full historical matrices:
+
+```bash
+python -m pip install -r requirements-experiments.txt
+python nested_experiment.py run \
+  --data-dir data/bbh_m2_5000 --output-dir results/bbh_m2_comparison \
+  --scenarios m2_row_0788 m2_row_1752 m2_row_1516 m2_row_0729 \
+  --methods ripr_uniform ripr_maxmin ripr_maxmax \
+            bet_uniform bet_maxmin bet_maxmax hedged_uniform hedged_wor \
+  --predictor faq --n-repeats 20 --repeat-start 0 --max-steps 5000 \
+  --epsilons 0.05 0.075 0.1 0.125 0.15 --seed 0 --alpha 0.05 \
+  --uniform-weight 0.05 --grow-opt-steps 25 \
+  --repeat-batch-size 8 --candidate-batch-size 256 --threads 2 \
+  --device cuda --no-plots
+python reproduce_figures.py --only bbh_m2_comparison \
+  --bbh-m2-results results/bbh_m2_comparison \
+  --output-dir reproduced/rerun_bbh_m2
+```
+
+Use `--device cpu` if needed. This simulation is expensive; the first redraw
+command only reads the recorded summaries. To rebuild those summaries:
+
+```bash
+python nested_experiment.py export \
+  --results-dir results/bbh_m2_comparison \
+  --experiment bbh_m2_comparison --output-dir data_rebuilt
+python reproduce_figures.py --only bbh_m2_comparison \
+  --data-dir data_rebuilt --output-dir reproduced/rebuilt_bbh_m2
+```
 
 ## Rerun the experiments
 
