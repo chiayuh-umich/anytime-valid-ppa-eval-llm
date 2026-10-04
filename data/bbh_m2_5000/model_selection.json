@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "base_dataset": "bbh+gpqa+ifeval+math+musr",
+  "n_questions": 5000,
+  "n_candidate_models": 2212,
+  "selected_rows_in_increasing_mismatch_order": [
+    788,
+    1752,
+    1516,
+    729
+  ],
+  "row_convention": "zero-based original M2 stored row; all row identities preserved in M2.csv.gz",
+  "selection_metric": "uniform-population initial MAE",
+  "target_mae_percentiles": [
+    0.1,
+    0.35,
+    0.65,
+    0.9
+  ],
+  "mae_rank_zero_based": [
+    221,
+    774,
+    1437,
+    1990
+  ],
+  "selection_algorithm": "Sort all models by initial_mae_z ascending, with original model_row ascending for ties. Choose ranks numpy.rint(target_percentile * (n_models-1)). Verify strict increase of MAE, KL and Brier and four distinct correctness vectors.",
+  "metric_formulas": {
+    "MAE": "mean_i abs(r0_i-z_i)",
+    "KL": "mean_i [-z_i*log(r0_i)-(1-z_i)*log(1-r0_i)] (natural logs)",
+    "Brier": "mean_i (r0_i-z_i)^2"
+  },
+  "metric_weights": "1/N for each of the 5000 fixed sampled questions; independent of future querying policy",
+  "initial_prediction_mean": 0.39171294053918315,
+  "strictly_increasing_metrics": [
+    "MAE",
+    "KL",
+    "Brier"
+  ],
+  "selection_uses_cs_experiment_outcomes": false,
+  "source_sha256": {
+    "M2.csv.gz": "2a5b8d19f014d67f18c40df4e50ac88a5b2259fcf551976fe31114c517d02061",
+    "r0.csv": "4b64d4b8a770988d3966f721a4a12f51fb7987a8aa1e7fbb26548ea9eefaad92",
+    "predictor.npz": "0aafb8b6581d50fb9e9b82f8d0e82ae9dc9b6ddd9c141cd354e4a3c4477940d2",
+    "question_map.csv": "c33e81eaf1acc23c1e20801a8bae5aa48fddaacbd89b846021b0aa65b05b25de"
+  },
+  "selection_table": "selected_models.csv",
+  "all_model_scan": "model_mismatch_scan.csv",
+  "scope": "Model selection only; no sequential experiments run and no simulation code changes."
+}

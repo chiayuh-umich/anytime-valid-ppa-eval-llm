@@ -1,0 +1,2402 @@
+[
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "bet_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_bet_maxmax/config.json",
+    "original_config_sha256": "9843baf67ff33ab05a18b75ebc887803a1bc9028f181c4ac9830b7964712f8be"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "bet_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_bet_maxmin/config.json",
+    "original_config_sha256": "15efc73bac250661efaddaaed3052c920491fa858afb3a30a44923724f36f9d6"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "bet_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_bet_uniform/config.json",
+    "original_config_sha256": "9d7781f3e7eb1104bfede568ba0e5f9319aace59068598f980d33cdeaa9bb356"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "hedged_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_hedged_uniform/config.json",
+    "original_config_sha256": "e3658019d41e2dda377b3ba81ae2ac35fb67aae188ed7815b9dc0f07eb90406c"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "hedged_wor"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_wor": "uniform_without_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_hedged_wor/config.json",
+    "original_config_sha256": "c2ecdf994b727d78a93fc2e566726cc82fc703884ade22a5a7d209104928b113"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "ripr_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_ripr_maxmax/config.json",
+    "original_config_sha256": "175646d076bd4c4a3b1c9e501e4e4037fb7d074a17576665c9937af3132357ea"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "ripr_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_ripr_maxmin/config.json",
+    "original_config_sha256": "419d09f00ffcebc0a01829bacfcecc8912dd98ff94a1dd76c81f6a594dcc2888"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0729"
+    ],
+    "methods": [
+      "ripr_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0729"
+    ],
+    "original_config": "m2_row_0729_ripr_uniform/config.json",
+    "original_config_sha256": "0a22e86d788475df4d59029f6ec4df33deef34d6b018bd63aa7f4417562e50b5"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "bet_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_bet_maxmax/config.json",
+    "original_config_sha256": "cd29a5791eb57d8274e4f0bc74a5d43fcd5f48298973593ae0e1cb8b04f59232"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "bet_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_bet_maxmin/config.json",
+    "original_config_sha256": "4a9abce23a79254edddb0accfd41126529c07b97f9a8ff40e318d8dc9cfd726c"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "bet_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_bet_uniform/config.json",
+    "original_config_sha256": "f4fe17c62cf82332381d0a82dcd6054a77793b9f664f53f385c512b6ce4e0af5"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "hedged_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_hedged_uniform/config.json",
+    "original_config_sha256": "768227ad7de3c753684e65925e1c29a2e4ab07fafb6ac7ba17f3518efd2070d5"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "hedged_wor"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_wor": "uniform_without_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_hedged_wor/config.json",
+    "original_config_sha256": "e13548bd0c191c24518a3d484f395d6234cbfbf554ff7dfc9ff3dcbd8462b91e"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "ripr_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_ripr_maxmax/config.json",
+    "original_config_sha256": "a1de2bdb21fc1f6f4d93be96e21a0cc3bc245d8b9df28442f189d7ccda314cb0"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "ripr_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_ripr_maxmin/config.json",
+    "original_config_sha256": "8401250e398b571bf4a112efb19739fa6d1b8d0d8dc437082986f5ad4321a558"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_0788"
+    ],
+    "methods": [
+      "ripr_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_0788"
+    ],
+    "original_config": "m2_row_0788_ripr_uniform/config.json",
+    "original_config_sha256": "6d236cf130d21e26c79d5f7112fabec933a1af0347033c85e585d4025b810403"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "bet_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_bet_maxmax/config.json",
+    "original_config_sha256": "11f66e593fcd0bf539718ac37d90af374ad25e70ec63af38f564e32ce68737cc"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "bet_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_bet_maxmin/config.json",
+    "original_config_sha256": "73db3af786269493bec73bc7a19807b84fe8dd4831a3a85faf5b0dd0b2c60d91"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "bet_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_bet_uniform/config.json",
+    "original_config_sha256": "c4e321f96d6d22a81721edf2200724af0f394584b70415d31a9d683eee487804"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "hedged_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_hedged_uniform/config.json",
+    "original_config_sha256": "eaad26565378d9897ad0ed34ba2397a8d732d62f0f09c0596aef8c5b2d00390c"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "hedged_wor"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_wor": "uniform_without_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_hedged_wor/config.json",
+    "original_config_sha256": "de7655ba5a67f6b87155574aaff66619958b24c6a776feab3781ef2a9c0e99a3"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "ripr_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_ripr_maxmax/config.json",
+    "original_config_sha256": "419699da957304980ec30a3a3fb4fd96cd4ccc8513032b79770093015272a24b"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "ripr_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_ripr_maxmin/config.json",
+    "original_config_sha256": "4f6ff47f4160c46da79b0c96ae74e2ab6c16ee973c85352d11d5a6314c92e16d"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1516"
+    ],
+    "methods": [
+      "ripr_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1516"
+    ],
+    "original_config": "m2_row_1516_ripr_uniform/config.json",
+    "original_config_sha256": "82d461674c3da80719a5f6b69ee3eefe582e7d020ba1c63883526d1cdeadaec9"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "bet_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_bet_maxmax/config.json",
+    "original_config_sha256": "d9a2621b88a8ed22061f6bb1a451f12bd3f0a40dbc2267ee22dbb8399eb5d5d0"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "bet_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_bet_maxmin/config.json",
+    "original_config_sha256": "8d32616e3a65694cbbfe569d647a585d80b3fa143e296e455faed56df5237455"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "bet_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "bet_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_bet_uniform/config.json",
+    "original_config_sha256": "3f113fcc9a50d3726a527e680ca3432600a450d618d88d07ac80d3d45ba390d7"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "hedged_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_hedged_uniform/config.json",
+    "original_config_sha256": "62deae71466423e8574c449ea8c330dadff8ae7a34e5d0562b090493e2e1a4d6"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "hedged_wor"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "hedged_wor": "uniform_without_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_hedged_wor/config.json",
+    "original_config_sha256": "9d3e07feb5f47d7f3e32176f3054f9d56b8964c1c75faa7e5f5a9311e40ac9d6"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "ripr_maxmax"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmax": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_ripr_maxmax/config.json",
+    "original_config_sha256": "068fc697fbbc4b05e413570055332bd4e945d18073d5d5472f962721311c75fb"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "ripr_maxmin"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_maxmin": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_ripr_maxmin/config.json",
+    "original_config_sha256": "e90c84af313fe7319e534cbf002aa76edfbe0ccf1a5ebeffc22676d14d815ada"
+  },
+  {
+    "command": "run",
+    "scenarios": [
+      "m2_row_1752"
+    ],
+    "methods": [
+      "ripr_uniform"
+    ],
+    "predictor": "faq",
+    "predictor_factory": null,
+    "predictor_kwargs": "{}",
+    "custom_oracle": false,
+    "kappas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "oracle_amplitude": 0.9,
+    "oracle_center": 0.7,
+    "n_repeats": 20,
+    "repeat_start": 0,
+    "repeat_batch_size": 8,
+    "candidate_batch_size": 256,
+    "max_steps": 5000,
+    "seed": 0,
+    "alpha": 0.05,
+    "hedge_cap": 0.5,
+    "hedge_weight": 0.5,
+    "epsilons": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15
+    ],
+    "uniform_weight": 0.05,
+    "grow_opt_steps": 25,
+    "grow_opt_lr": 0.5,
+    "grow_opt_rtol": 0.0001,
+    "grow_opt_atol": 1e-09,
+    "device": "cuda",
+    "threads": 2,
+    "progress_every": 100,
+    "anchor_step": 1000,
+    "no_plots": true,
+    "experiment_kind": "nested_fixed_z",
+    "schema_version": 3,
+    "status": "complete",
+    "n_questions": 5000,
+    "manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+    "cs_definition": "intersection_{s<=t}{m:W_s(m)<1/alpha}",
+    "coverage_definition": "exact surviving theta_star candidate; equals through-time coverage",
+    "width_definition": "max(active)-min(active); empty diameter=0 but empty is not a precision hit",
+    "stopping_definition": "first nonempty nested CS with full width <= epsilon, capped at max_steps",
+    "betting_range": "full valid range (same as existing implementation)",
+    "querying": "uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+    "maxmax_definition": "max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
+    "sampling": {
+      "ripr_uniform": "with_replacement"
+    },
+    "random_streams": "SeedSequence([seed, stable scenario index, repeat_id]); paired across methods/kappa",
+    "prediction_timing": "predict before query; update only after current queried label",
+    "hedged_definition": "Section 4.4 eqs (24)-(26); max(weight*K_plus,(1-weight)*K_minus); nested",
+    "hedged_predictor": "none; pre-observation label statistics only; one run per scenario, independent of kappa",
+    "hedged_wor_definition": "Theorem 4; m_t=(N*m-S_(t-1))/(N-t+1); intersect nested CS with [S_t/N,(S_t+N-t)/N]",
+    "hedged_wor_sampling": "uniform among remaining indices via partial Fisher-Yates; shared uniforms but different indices from WR",
+    "source_sha256": {
+      "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b"
+    },
+    "exported_scenarios": [
+      "m2_row_1752"
+    ],
+    "original_config": "m2_row_1752_ripr_uniform/config.json",
+    "original_config_sha256": "2655dd59f584dd4375dedc9ef855ad298b74a21cc31ea191a02092f9667fdb76"
+  }
+]

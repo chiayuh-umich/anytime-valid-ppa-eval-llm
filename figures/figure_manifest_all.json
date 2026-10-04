@@ -16,7 +16,10 @@
     "one_step_mae_m2_comparison",
     "cumulative_kl_query_m2_comparison",
     "cumulative_mae_m2_comparison",
-    "validity_tilde_z2_bet_uniform_r800"
+    "validity_tilde_z2_bet_uniform_r800",
+    "stopping_time_bbh_m2_comparison",
+    "one_step_kl_query_bbh_m2_comparison",
+    "one_step_mae_bbh_m2_comparison"
   ],
   "figure_files": {
     "stopping_time_z123": {
@@ -82,6 +85,18 @@
     "validity_tilde_z2_bet_uniform_r800": {
       "pdf": "appendix_figure/10_validity_tilde_z2_bet_uniform_r800.pdf",
       "png": "appendix_figure/10_validity_tilde_z2_bet_uniform_r800.png"
+    },
+    "stopping_time_bbh_m2_comparison": {
+      "pdf": "appendix_figure/stopping_time_bbh_m2_comparison.pdf",
+      "png": "appendix_figure/stopping_time_bbh_m2_comparison.png"
+    },
+    "one_step_kl_query_bbh_m2_comparison": {
+      "pdf": "appendix_figure/one_step_kl_query_bbh_m2_comparison.pdf",
+      "png": "appendix_figure/one_step_kl_query_bbh_m2_comparison.png"
+    },
+    "one_step_mae_bbh_m2_comparison": {
+      "pdf": "appendix_figure/one_step_mae_bbh_m2_comparison.pdf",
+      "png": "appendix_figure/one_step_mae_bbh_m2_comparison.png"
     }
   },
   "paths_relative_to": "output root",
@@ -106,6 +121,10 @@
       "validity_r800/step_summary.csv.gz": "3b4b4ace36169fb12cb01d87cc42e8a80cd87b0a065290e056941719de0f10ca",
       "validity_r800/stopping_summary.csv.gz": "7d765ef488ddf74a03ae43a849401caecf02f6d71b8e8ef3fbd85a5cffc6b124",
       "validity_r800/repeat_coverage.csv": "a969bf8b515e88f2eebd16c7d226bb4351dde8ffe94a2e030cfc4be81b11b087"
+    },
+    "bbh_m2_comparison": {
+      "bbh_m2_comparison/step_summary.csv.gz": "6e0ac3de0c7b9c7c8dfae851e2fbbfb04430fac6f1d8da9abbb254f0a646b050",
+      "bbh_m2_comparison/stopping_summary.csv.gz": "672631dd9f34657ade6a564bac1c030329fd465c6f42260ea4d2a242a8d2dd7b"
     }
   },
   "uncertainty": "+/-1 SE; pointwise 95% Clopper-Pearson Monte Carlo intervals for coverage",

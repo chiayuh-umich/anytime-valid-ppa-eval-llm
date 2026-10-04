@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "figures": [
+    "stopping_time_bbh_m2_comparison",
+    "one_step_kl_query_bbh_m2_comparison",
+    "one_step_mae_bbh_m2_comparison"
+  ],
+  "figure_files": {
+    "stopping_time_bbh_m2_comparison": {
+      "pdf": "appendix_figure/stopping_time_bbh_m2_comparison.pdf",
+      "png": "appendix_figure/stopping_time_bbh_m2_comparison.png"
+    },
+    "one_step_kl_query_bbh_m2_comparison": {
+      "pdf": "appendix_figure/one_step_kl_query_bbh_m2_comparison.pdf",
+      "png": "appendix_figure/one_step_kl_query_bbh_m2_comparison.png"
+    },
+    "one_step_mae_bbh_m2_comparison": {
+      "pdf": "appendix_figure/one_step_mae_bbh_m2_comparison.pdf",
+      "png": "appendix_figure/one_step_mae_bbh_m2_comparison.png"
+    }
+  },
+  "paths_relative_to": "output root",
+  "source_hashes": {
+    "bbh_m2_comparison": {
+      "bbh_m2_comparison/step_summary.csv.gz": "6e0ac3de0c7b9c7c8dfae851e2fbbfb04430fac6f1d8da9abbb254f0a646b050",
+      "bbh_m2_comparison/stopping_summary.csv.gz": "672631dd9f34657ade6a564bac1c030329fd465c6f42260ea4d2a242a8d2dd7b"
+    }
+  },
+  "uncertainty": "+/-1 SE; pointwise 95% Clopper-Pearson Monte Carlo intervals for coverage",
+  "theory": "Rate guides normalized to empirical width at the recorded anchor; not numerical bounds",
+  "plots_include_paper_captions": false
+}

@@ -20,6 +20,12 @@
     "m2_row_0542": {
       "source": "data/mmlu_pro_m2_mean_pair_5000/m2_row_0542",
       "source_manifest_sha256": "e9414bbf78d13acff90c2f7b06edb462fe039087b973f1d10a5e5d1d963b9e2d"
+    },
+    "bbh_m2_5000": {
+      "source": "data/bbh_gpqa_ifeval_math_musr_m2_four_models_5000",
+      "source_manifest_sha256": "7c610def18c6583395a31b32ae25a6e9af1a566090a8fd13b923fd16b1776676",
+      "source_benchmark": "bbh+gpqa+ifeval+math+musr",
+      "question_sampling": "5000 fixed proportionally stratified questions from 9574; seed 0; see question_map.csv"
     }
   },
   "experiments": {
@@ -123,6 +129,32 @@
       "source_raw_steps_sha256": "f1a119d5ca1c99efee83b6734d78f2b4366dccf98538180c000750a7804d9bd0",
       "overlap_note": "Repeats 0-299 reuse the old 300-repeat experiment streams; these results are not pooled with that experiment.",
       "original_runner_and_packaged_inputs_match": true
+    },
+    "bbh_m2_comparison": {
+      "source_results": "logs/synthetic/nested_bbh_gpqa_ifeval_math_musr_5000_parts",
+      "n_cases": 32,
+      "n_models": 4,
+      "n_repeats": 20,
+      "n_step_rows": 160000,
+      "n_stopping_rows": 160,
+      "model_rows_in_panel_order": [
+        788,
+        1752,
+        1516,
+        729
+      ],
+      "retained_metrics": [
+        "width",
+        "anytime_covered",
+        "empty_cs",
+        "mae_z",
+        "kl_z_query",
+        "cum_mae_z",
+        "cum_kl_z_query",
+        "brier_z"
+      ],
+      "data_kind": "Per-step and per-threshold means and standard errors; raw per-repeat trajectories not distributed",
+      "source_runs_file": "bbh_m2_comparison/source_runs.json"
     }
   },
   "scenario_names": {

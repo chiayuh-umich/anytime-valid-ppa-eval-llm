@@ -36,7 +36,9 @@ METHODS = {
 }
 BASELINES = ("hedged_uniform", "hedged_wor")
 M2_SCENARIOS = tuple(f"m2_row_{row:04d}" for row in (1183, 1506, 483, 542))
-EXPERIMENTS = ("comparison", "validity", "mismatch", "m2_comparison", "validity_r800")
+BBH_M2_SCENARIOS = tuple(f"m2_row_{row:04d}" for row in (788, 1752, 1516, 729))
+EXPERIMENTS = ("comparison", "validity", "mismatch", "m2_comparison", "validity_r800",
+               "bbh_m2_comparison")
 # Fixed paper numbering, independent of which files already exist on disk.
 PAPER_FIGURES = {
     "width_vs_theory_rate_combined": "main_figure/1_width_vs_theory_rate",
@@ -49,6 +51,9 @@ PAPER_FIGURES = {
     "one_step_mae_m2_comparison": "appendix_figure/8_one_step_mae_m2_comparison",
     "validity_through_t": "appendix_figure/9_validity_through_t",
     "validity_tilde_z2_bet_uniform_r800": "appendix_figure/10_validity_tilde_z2_bet_uniform_r800",
+    "stopping_time_bbh_m2_comparison": "appendix_figure/stopping_time_bbh_m2_comparison",
+    "one_step_kl_query_bbh_m2_comparison": "appendix_figure/one_step_kl_query_bbh_m2_comparison",
+    "one_step_mae_bbh_m2_comparison": "appendix_figure/one_step_mae_bbh_m2_comparison",
 }
 VALIDITY_LABELS = {
     "z_2": r"$z_2$",
@@ -206,9 +211,10 @@ def coverage_intervals(step):
     return step
 
 
-def plot_m2_comparison(step, stop, output):
+def plot_m2_comparison(step, stop, output, scenarios=M2_SCENARIOS,
+                       kinds=None, suffix="m2_comparison"):
     """Four matched M2 models; all methods remain separate in each model panel."""
-    step, stop = (select_faq(frame, M2_SCENARIOS) for frame in (step, stop))
+    step, stop = (select_faq(frame, scenarios) for frame in (step, stop))
     for frame, xcol in ((step, "step"), (stop, "epsilon")):
         if frame.duplicated(["scenario", "method", xcol]).any():
             raise ValueError("Ambiguous M2 regimes; expected one regime per method")
@@ -223,7 +229,7 @@ def plot_m2_comparison(step, stop, output):
             for method, values in group.groupby("method"):
                 if not np.array_equal(values.sort_values(xcol)[xcol].to_numpy(), expected_x):
                     raise ValueError(f"Incomplete {xcol} grid for {scenario}/{method}")
-    for scenario in M2_SCENARIOS:
+    for scenario in scenarios:
         s, t = step[step.scenario == scenario], stop[stop.scenario == scenario]
         for column in ("z_sha256", "theta_star", "n_repeats", "n_questions", "horizon", "alpha"):
             if pd.concat([s[column], t[column]]).nunique() != 1:
@@ -249,8 +255,11 @@ def plot_m2_comparison(step, stop, output):
     }
     files = []
     for kind, (selected, xcol, metric, ylabel, stem) in settings.items():
+        if kinds is not None and kind not in kinds:
+            continue
+        stem = stem.removesuffix("m2_comparison") + suffix
         fig, axes = plt.subplots(2, 2, figsize=(11, 8.2), sharex=True, sharey=True)
-        for ax, scenario in zip(axes.flat, M2_SCENARIOS):
+        for ax, scenario in zip(axes.flat, scenarios):
             frame = selected[selected.scenario == scenario]
             row, theta = int(frame.model_row.iloc[0]), float(frame.theta_star.iloc[0])
             for method, (label, color, marker) in METHODS.items():
@@ -291,12 +300,13 @@ def plot_m2_comparison(step, stop, output):
             axes.flat[0].set_ylim(bottom=0)
         files.append(save_figure(fig, output, stem))
 
-    order = {s: i for i, s in enumerate(M2_SCENARIOS)}
+    order = {s: i for i, s in enumerate(scenarios)}
     stopping_values = stop.sort_values(["scenario", "method", "epsilon"], key=lambda c:
                                       c.map(order) if c.name == "scenario" else c)
-    stopping_values.to_csv(output / "stopping_time_m2_comparison_values.csv", index=False)
-    terminal = step.sort_values("step").groupby(KEYS, as_index=False).tail(1)
-    terminal.to_csv(output / "coverage_m2_comparison_terminal.csv", index=False)
+    stopping_values.to_csv(output / f"stopping_time_{suffix}_values.csv", index=False)
+    if kinds is None or "coverage" in kinds:
+        terminal = step.sort_values("step").groupby(KEYS, as_index=False).tail(1)
+        terminal.to_csv(output / f"coverage_{suffix}_terminal.csv", index=False)
     return files
 
 
@@ -494,6 +504,8 @@ def main():
                         help="Use a new standalone tilde_z_2 / betting-uniform validity run")
     parser.add_argument("--m2-results", dest="m2_comparison_results", type=Path, nargs="+",
                         help="One or more completed M2 run directories containing all four models")
+    parser.add_argument("--bbh-m2-results", dest="bbh_m2_comparison_results", type=Path, nargs="+",
+                        help="Completed combined-suite runs for rows 788, 1752, 1516 and 729")
     args = parser.parse_args()
     if args.anchor_step < 1:
         parser.error("--anchor-step must be positive")
@@ -521,6 +533,9 @@ def main():
             files.append(plot_validity_r800(step, output, repeat_coverage))
         elif case == "m2_comparison":
             files.extend(plot_m2_comparison(step, stop, output))
+        elif case == "bbh_m2_comparison":
+            files.extend(plot_m2_comparison(step, stop, output, scenarios=BBH_M2_SCENARIOS,
+                         kinds=("stopping", "kl", "mae"), suffix="bbh_m2_comparison"))
         else:
             files.append(plot_mismatch(step, output, args.anchor_step))
     figure_files = {stem: {ext: figure_path(output, stem).with_suffix(f".{ext}").relative_to(

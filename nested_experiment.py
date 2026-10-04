@@ -1883,7 +1883,7 @@ def export_results(args):
                "kappa", "oracle_amplitude", "oracle_center", "theta_star",
                "z_sha256", "n_questions", "horizon", "alpha", "sampling"]
     metrics = ["width", "anytime_covered", "empty_cs", "mae_z", "kl_z_query"]
-    if args.experiment == "m2_comparison":
+    if args.experiment in ("m2_comparison", "bbh_m2_comparison"):
         metrics += ["cum_mae_z", "cum_kl_z_query", "brier_z"]
         columns += [column for column in M2_METADATA if column in step]
     columns += [f"{metric}_{stat}" for metric in metrics for stat in ("mean", "se")]
@@ -2289,7 +2289,8 @@ def parse_args(argv=None):
                                help="One or more directories containing disjoint completed runs")
     export_parser.add_argument("--output-dir", required=True, help="Root data directory to create/update")
     export_parser.add_argument("--experiment", required=True,
-                               choices=("comparison", "validity", "mismatch", "m2_comparison"))
+                               choices=("comparison", "validity", "mismatch", "m2_comparison",
+                                        "bbh_m2_comparison"))
     return parser.parse_args(argv)
 
 if __name__ == "__main__":
