@@ -41,8 +41,9 @@
   "input_data": "All packaged labels and predictor NPZ files byte-identical to originals",
   "summary_data": "Numerical summary values are unchanged; scenario names use the documented legacy-to-paper mapping. Fresh exports agree exactly with packaged tables.",
   "packaged_source_sha256": {
-    "nested_experiment.py": "19b0a27693265ebbd07061acc0fa68c2cc4290c918008fef13a4e57f5d0c300b",
-    "reproduce_figures.py": "ceef972ad9b8181a224b5fe1ba8ed69c9318d39cac167a4f7d153a19df5ccd8c"
+    "nested_experiment.py": "ecd2034d52b8d477e0c981843373c053896b514b9ded332170bee704ca39b958",
+    "reproduce_figures.py": "bf71fe601218a1b4423ee8c6b54381fa9ccf13e5e54cd03e4496fee33ae24648",
+    "test_sqrtvar.py": "f71cf9d5cb529bc4b1c350323ba32e2fbd8c5c4292a6f12cac644909ac20ac74"
   },
   "consolidated_from_sha256": {
     "nested_fixed_z_experiment.py": "75acfc817ef1710a688ebaa5c81b9065bb2d4262da3014ee699d9f2bd772ac34",
@@ -153,5 +154,148 @@
       "appendix_figure/4_one_step_mae_z123.pdf": "b0cc21265735e6272e11a3d55eabf327f25f148ae8be5febee7613a407688fff",
       "appendix_figure/5_one_step_kl_query_z123.pdf": "310c96084cabc6de74a6871f8db5e86c4ffe22052503a182b1809fece90aa670"
     }
+  },
+  "bbh_m2_comparison_extension": {
+    "checked": "2026-10-03",
+    "model_rows": [
+      788,
+      1752,
+      1516,
+      729
+    ],
+    "panels": [
+      2,
+      2
+    ],
+    "new_figures": 3,
+    "runs": 32,
+    "step_summary_rows_verified_exactly": 160000,
+    "stopping_summary_rows_verified_exactly": 160,
+    "copied_inputs_byte_identical": true,
+    "target_means_and_initial_mae_kl_verified": true,
+    "new_pdf_png_pairs_byte_identical_to_original_plots": true,
+    "isolated_all_figures_redrawn": 19,
+    "isolated_plotting_with_torch_and_runner_imports_blocked": true,
+    "all_19_pdf_png_pairs_identical_to_package": true,
+    "bundled_data_files": 55,
+    "full_simulations_rerun": false,
+    "simulation_algorithm_changed": false,
+    "runner_change": "Add bbh_m2_comparison as a compact export group; simulation unchanged",
+    "new_paper_figure_numbers_assigned": false
+  },
+  "sqrtvar_extension": {
+    "checked": "2026-10-05",
+    "new_methods": [
+      "ripr_sqrtvar",
+      "bet_sqrtvar"
+    ],
+    "query_rule": "(1-eta)*sqrt(r*(1-r))/sum_i sqrt(r_i*(1-r_i))+eta/N",
+    "eta_in_launcher": 0.05,
+    "betting_bound_floor": "eta/N, same convention as max-min/max-max",
+    "unit_test_count": 6,
+    "unit_tests_passed": true,
+    "conditional_evalue_check": "Both families; all 16 four-question binary populations; integrate over every next-query index",
+    "predictor_timing_query_paths_and_no_optimizer_checked": true,
+    "uniform_weight_one_matches_uniform_trajectories_exactly": true,
+    "repeat_and_candidate_batching_invariance_checked": true,
+    "evidence_solvers_faq_and_nested_update_ast_unchanged": true,
+    "existing_six_policy_trajectories_and_eliminations_unchanged": true,
+    "actual_input_cpu_smoke": {
+      "model_row": 1183,
+      "n_questions": 5000,
+      "repeats": 1,
+      "steps": 1,
+      "methods": [
+        "ripr_sqrtvar",
+        "bet_sqrtvar"
+      ]
+    },
+    "slurm_task_mappings_checked": 8,
+    "slurm_submitted": false,
+    "small_cli_integration": {
+      "models": 4,
+      "original_method_cases": 32,
+      "added_method_cases": 8,
+      "repeats": 2,
+      "horizon": 3,
+      "merged_figures": 7,
+      "raw_merge_and_bundled_plus_additional_plotting_passed": true
+    },
+    "original_mmlu_m2_figures_byte_identical_pdf_png_pairs": 7,
+    "full_experiments_rerun": false,
+    "production_data_modified": false,
+    "new_script": "run_nested_m2_sqrtvar.sh (repository launcher; cluster settings are not embedded in the package)"
+  },
+  "bbh_sqrtvar_extension": {
+    "checked": "2026-10-05",
+    "models": [
+      788,
+      1752,
+      1516,
+      729
+    ],
+    "methods": [
+      "ripr_sqrtvar",
+      "bet_sqrtvar"
+    ],
+    "n_repeats_per_task": 20,
+    "horizon": 5000,
+    "alpha": 0.05,
+    "uniform_weight": 0.05,
+    "launcher": "run_nested_bbh_m2_sqrtvar.sh (outside the portable package)",
+    "slurm_task_mappings_verified": 8,
+    "slurm_submitted": false,
+    "prepared_bank_matches_original_configs": true,
+    "simulation_code_changed": false,
+    "unit_tests_passed": 6,
+    "actual_input_cpu_smoke": {
+      "row": 788,
+      "n_questions": 5000,
+      "repeats": 1,
+      "steps": 1,
+      "both_new_methods_passed": true
+    },
+    "small_combined_plot_test": {
+      "models": 4,
+      "original_cases": 32,
+      "added_cases": 8,
+      "repeats": 2,
+      "horizon": 3,
+      "figures": 7,
+      "raw_results_merge_passed": true
+    },
+    "original_bbh_pdf_png_pairs_byte_identical": 3,
+    "wrong_benchmark_cli_selection_rejected": true,
+    "production_results_unchanged": true,
+    "full_experiments_rerun": false
+  },
+  "sqrtvar_paper_figures_extension": {
+    "checked": "2026-10-06",
+    "paper_figures": [
+      14,
+      15
+    ],
+    "data_folders": [
+      "data/comparison_sqrtvar",
+      "data/bbh_m2_sqrtvar"
+    ],
+    "numbered_pdf_sha256": {
+      "main_figure/14_stopping_time_z123.pdf": "30d7a8a3fe2f5de4525e606ea0253a3d3d790b784781d531eeea278add0968bf",
+      "appendix_figure/15_stopping_time_bbh_m2_comparison.pdf": "40345704db89c4fdc96376b94c5eb8ec3e30edcbd9f1bd3ea7184fda81bd07dc"
+    },
+    "reference_pdfs_byte_identical": true,
+    "bundled_cases": 100,
+    "bundled_step_summary_rows": 500000,
+    "bundled_stopping_summary_rows": 500,
+    "bundled_repeat_stopping_rows": 10000,
+    "stopping_means_standard_errors_and_hit_fractions_verified_from_all_repeat_records": true,
+    "bundled_data_files": 64,
+    "isolated_default_figures_redrawn": 21,
+    "isolated_with_torch_and_original_runner_imports_blocked": true,
+    "all_21_pdf_png_pairs_byte_identical_to_package": true,
+    "raw_multi_directory_cli_matches_bundled_pdf_png": true,
+    "new_source_provenance_contains_no_absolute_user_paths_or_cluster_account": true,
+    "simulation_code_changed": false,
+    "full_simulations_rerun": false
   }
 }

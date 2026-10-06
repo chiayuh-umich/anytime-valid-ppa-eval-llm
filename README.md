@@ -28,6 +28,7 @@ nested_reproduction/
   README.md
   nested_experiment.py          All simulation and numerical solver code
   reproduce_figures.py          Paper plots, both M2 suites and r800 validity
+  test_sqrtvar.py               Sqrt-variance validity and integration checks
   requirements.txt             Plotting dependencies
   requirements-experiments.txt Simulation dependencies
   verification.json           Executed checks and source-code hashes
@@ -44,12 +45,14 @@ nested_reproduction/
     mismatch/                  Recorded summaries: 20 repeats, 5000 steps
     m2_comparison/              Four real M2 models: 20 repeats, 5000 steps
     bbh_m2_comparison/          Combined-suite comparison summaries and model list
+    comparison_sqrtvar/        Ten-method summaries + per-repeat stops for Figure 14
+    bbh_m2_sqrtvar/             Ten-method summaries + per-repeat stops for Figure 15
     bbh_m2_5000/                Four labels, aligned FAQ snapshot and question map
     initial_mismatch.csv       Initial means, MAE, Brier and KL
     provenance.json            Sources and retained data definitions
     checksums.json             SHA-256 hashes of all distributed data files
-  main_figure/                 Paper Figures 1--2, numbered PDF and PNG files
-  appendix_figure/             Figures 3--10 and three combined-suite comparisons
+  main_figure/                 Paper Figures 1, 2, 14, numbered PDF and PNG files
+  appendix_figure/             Figures 3--10, 15 and three combined-suite comparisons
   figures/                    Additional diagnostics, numeric tables and metadata
 ```
 
@@ -90,7 +93,7 @@ python reproduce_figures.py
 ```
 
 The plotting script verifies the distributed data hashes before use. The default
-command redraws **10 numbered paper figures** directly into `main_figure/` and
+command redraws **12 numbered paper figures (1--10, 14, 15)** directly into `main_figure/` and
 `appendix_figure/`, using the filenames below. Each PDF also has a PNG with the
 same stem. The numbering is fixed in the script: the output folders need not
 already contain any figures. Running it again overwrites the matching output
@@ -111,6 +114,8 @@ It uses a headless Matplotlib backend; LaTeX and PyTorch are not needed.
 | 8 | `appendix_figure/8_one_step_mae_m2_comparison.pdf` | One-step MAE for the four M2 models, betting methods only |
 | 9 | `appendix_figure/9_validity_through_t.pdf` | Coverage through each time, four panels, 300 repeats |
 | 10 | `appendix_figure/10_validity_tilde_z2_bet_uniform_r800.pdf` | Betting uniform on tilde z_2 only, 800 repeats, 500 steps |
+| 14 | `main_figure/14_stopping_time_z123.pdf` | Ten methods including sqrt-variance, z_1 / z_2 / z_3, 1 x 3 panels |
+| 15 | `appendix_figure/15_stopping_time_bbh_m2_comparison.pdf` | Ten methods including sqrt-variance, four combined-suite models, 2 x 2 panels |
 | Unnumbered | `appendix_figure/stopping_time_bbh_m2_comparison.pdf` | Combined-suite capped stopping queries, four models |
 | Unnumbered | `appendix_figure/one_step_kl_query_bbh_m2_comparison.pdf` | Combined-suite RIPr one-step query-weighted KL |
 | Unnumbered | `appendix_figure/one_step_mae_bbh_m2_comparison.pdf` | Combined-suite betting one-step population MAE |
@@ -132,6 +137,8 @@ python reproduce_figures.py --only validity
 python reproduce_figures.py --only mismatch
 python reproduce_figures.py --only m2_comparison
 python reproduce_figures.py --only validity_r800
+python reproduce_figures.py --only comparison_sqrtvar
+python reproduce_figures.py --only bbh_m2_sqrtvar
 ```
 
 `--output-dir` now specifies an **output root**, rather than a flat figure
@@ -145,6 +152,87 @@ and Monte Carlo intervals, and `theory_guide_anchors.csv` records the exact
 scaling of each dashed reference curve. Each invocation also writes
 `figure_manifest_<group>.json`, whose `figure_files` field lists the actual
 PDF/PNG paths relative to the output root.
+
+### Figures 14 and 15: recorded sqrt-variance comparisons
+
+Both figures are included in the default `python reproduce_figures.py` command.
+To redraw only these two, run from this directory:
+
+```bash
+python reproduce_figures.py --only comparison_sqrtvar
+python reproduce_figures.py --only bbh_m2_sqrtvar
+```
+
+The outputs are `main_figure/14_stopping_time_z123.pdf` and
+`appendix_figure/15_stopping_time_bbh_m2_comparison.pdf`, plus PNGs with the
+same names. No external logs, original project modules, PyTorch, GPU or new
+simulations are needed to redraw them. Figures 2 and the earlier eight-method
+combined-suite plots retain their own data and filenames.
+
+Each figure compares ten methods: RIPr and betting with uniform, max-min,
+max-max and sqrt-variance querying, plus Hedged-CS and Hedged-WoR. RIPr curves
+are purple, betting curves orange, and sqrt-variance uses diamond markers.
+All curves are solid. Each point is the mean of 20 per-repeat stopping counts,
+capped at 5000 queries, with +/-1 standard error shading. A hollow marker means
+at least one repeat did not reach that width threshold by the horizon. All
+methods use alpha 0.05 and thresholds 0.05, 0.075, 0.1, 0.125 and 0.15.
+
+The portable inputs and plotting data are:
+
+| Figure | Simulation inputs already included | Recorded results |
+| --- | --- | --- |
+| 14 | `data/benchmark_5000/`: fixed z_1, z_2, z_3 and FAQ snapshot | `data/comparison_sqrtvar/` |
+| 15 | `data/bbh_m2_5000/`: rows 788, 1752, 1516, 729 on the same stratified 5000 questions | `data/bbh_m2_sqrtvar/` |
+
+Each results folder includes `step_summary.csv.gz`, `stopping_summary.csv.gz`,
+`repeat_stopping.csv.gz` and `source_runs.json`. The repeat table contains the
+individual stopping outcomes used to verify all means, standard errors and hit
+fractions. The step table contains per-step summaries; full per-repeat query
+trajectories are not included. The Figure 14 folder also retains the three
+permuted scenarios, although Figure 14 itself displays only the unpermuted ones.
+The Figure 15 folder additionally contains `models.csv`. Data hashes are recorded
+in `data/checksums.json`; source paths in the provenance are relative records,
+not runtime dependencies. Plotting also writes numeric values and a figure
+manifest under `figures/`.
+
+To **rerun** the simulations rather than redraw the recorded data, first install
+`requirements-experiments.txt`, then use the following commands. They use the
+included FAQ initialization and sequential update; no new training or dataset
+preparation is required. These are full, expensive simulations, unlike the two
+quick redraw commands above.
+
+```bash
+# Figure 14 inputs, including the three permuted controls kept in the data folder.
+python nested_experiment.py run \
+  --data-dir data/benchmark_5000 --output-dir results/figure14 \
+  --scenarios z_1 z_2 z_3 tilde_z_1 tilde_z_2 tilde_z_3 \
+  --methods ripr_uniform ripr_maxmin ripr_maxmax ripr_sqrtvar bet_uniform bet_maxmin bet_maxmax bet_sqrtvar hedged_uniform hedged_wor \
+  --predictor faq --n-repeats 20 --repeat-start 0 --max-steps 5000 \
+  --epsilons 0.05 0.075 0.1 0.125 0.15 --seed 0 --alpha 0.05 \
+  --uniform-weight 0.05 --grow-opt-steps 25 \
+  --repeat-batch-size 8 --candidate-batch-size 256 --threads 2 \
+  --device cuda --no-plots
+python reproduce_figures.py --only comparison_sqrtvar \
+  --comparison-sqrtvar-results results/figure14 --output-dir reproduced/figure14
+
+# Figure 15: fixed model rows and the included, aligned 5000-question sample.
+python nested_experiment.py run \
+  --data-dir data/bbh_m2_5000 --output-dir results/figure15 \
+  --scenarios m2_row_0788 m2_row_1752 m2_row_1516 m2_row_0729 \
+  --methods ripr_uniform ripr_maxmin ripr_maxmax ripr_sqrtvar bet_uniform bet_maxmin bet_maxmax bet_sqrtvar hedged_uniform hedged_wor \
+  --predictor faq --n-repeats 20 --repeat-start 0 --max-steps 5000 \
+  --epsilons 0.05 0.075 0.1 0.125 0.15 --seed 0 --alpha 0.05 \
+  --uniform-weight 0.05 --grow-opt-steps 25 \
+  --repeat-batch-size 8 --candidate-batch-size 256 --threads 2 \
+  --device cuda --no-plots
+python reproduce_figures.py --only bbh_m2_sqrtvar \
+  --bbh-m2-sqrtvar-results results/figure15 --output-dir reproduced/figure15
+```
+
+Both `--*-sqrtvar-results` options also accept multiple completed result roots,
+so old methods and separately run sqrt-variance methods can be combined without
+rerunning the old methods. All requested models and all ten methods must be
+present, with matching labels, repeats, levels and horizons.
 
 ### Standalone validity figure: 800 repeats
 
@@ -488,6 +576,167 @@ The model metadata required for the plot is retained in the exported tables.
 `models.csv` is an additional human-readable provenance table; it is not
 required by the plotting command. New simulations are expensive; simply
 redrawing the included summaries does not run any experiments.
+
+### Additional MMLU-Pro querying rule: sqrt-variance
+
+The opt-in methods `ripr_sqrtvar` and `bet_sqrtvar` use
+
+```text
+w_t(i) = sqrt(r_(t-1)(i) * (1-r_(t-1)(i))),
+q_t(i) = (1-eta) * w_t(i)/sum_j w_t(j) + eta/N,
+eta = --uniform-weight (0.05 in this experiment).
+```
+
+The FAQ initialization and sequential Laplace update are unchanged. Predictions
+are evaluated before the query and updated after observing its response. Sampling
+is with replacement. This O(N) querying rule has no endpoint optimization or
+CS-dependent switching; it continues even if a repeat's CS becomes empty.
+The original RIPr projection and exact numerical betting-fraction solvers still
+run for the surviving candidates. As in max-min/max-max, the betting bounds
+use the guaranteed floor `h = eta/N`, not a new quadratic approximation or a
+new range based on the actual minimum of q. The two methods use the same query
+paths when supplied with the same FAQ initialization and random streams.
+
+Run both new methods on the four existing MMLU-Pro models:
+
+```bash
+for row in 1183 1506 0483 0542; do
+  python nested_experiment.py run \
+    --data-dir "data/m2_row_${row}" \
+    --output-dir "results/m2_sqrtvar/m2_row_${row}" \
+    --scenarios "m2_row_${row}" --methods ripr_sqrtvar bet_sqrtvar \
+    --predictor faq --n-repeats 20 --repeat-start 0 --max-steps 5000 \
+    --epsilons 0.05 0.075 0.1 0.125 0.15 --seed 0 --alpha 0.05 \
+    --uniform-weight 0.05 --repeat-batch-size 8 --candidate-batch-size 256 \
+    --threads 2 --device cuda --no-plots
+done
+python reproduce_figures.py --only m2_comparison \
+  --m2-additional-results results/m2_sqrtvar \
+  --output-dir reproduced/m2_with_sqrtvar
+```
+
+The plot command appends the two new methods to the eight methods in the
+bundled `data/m2_comparison/` summaries, without rerunning them. It generates
+seven 2 × 2 plots: stopping time, width, coverage, and one-step/cumulative KL
+and MAE, using the existing paper-directory layout under the chosen output
+root. Sqrt-variance uses diamond markers, purple for RIPr and orange for betting.
+All four panels must contain the same methods. For each model, added runs must
+match the recorded repeats, horizon, alpha, labels and predictor/question
+alignment; duplicated method/scenario points are rejected.
+`--m2-results DIR...` may additionally replace the original eight-method source
+with newly simulated results. To merge raw results for export, pass all result
+directories to `nested_experiment.py export --experiment m2_comparison`.
+
+Full per-repeat trajectories, exact nested membership/coverage, mismatch,
+stopping records, elimination times and per-batch wall time are saved as usual.
+`query_opt_iterations` and `query_opt_evaluations` are zero for sqrt-variance;
+this does not mean evidence calculation is skipped. No new 5000-step results
+are bundled until these experiments are actually run.
+
+Focused implementation checks can be run from this directory with:
+
+```bash
+python -m unittest test_sqrtvar -v
+```
+
+### Combined-suite sqrt-variance comparison
+
+The same `ripr_sqrtvar` and `bet_sqrtvar` methods also accept the BBH + GPQA +
+IFEval + MATH + MuSR bank. Use the existing shared 5000-question subset and the
+four previously selected models, in mismatch order 788, 1752, 1516, 729:
+
+```bash
+python nested_experiment.py run \
+  --data-dir data/bbh_m2_5000 --output-dir results/bbh_m2_sqrtvar \
+  --scenarios m2_row_0788 m2_row_1752 m2_row_1516 m2_row_0729 \
+  --methods ripr_sqrtvar bet_sqrtvar --predictor faq \
+  --n-repeats 20 --repeat-start 0 --max-steps 5000 \
+  --epsilons 0.05 0.075 0.1 0.125 0.15 --seed 0 --alpha 0.05 \
+  --uniform-weight 0.05 --repeat-batch-size 8 --candidate-batch-size 256 \
+  --threads 2 --device cuda --no-plots
+python reproduce_figures.py --only bbh_m2_comparison \
+  --bbh-m2-additional-results results/bbh_m2_sqrtvar \
+  --output-dir reproduced/bbh_m2_with_sqrtvar
+```
+
+Only the two new methods need new simulations. The plotting command combines
+them with the original eight methods from `data/bbh_m2_comparison/` and checks
+that all four models have matched inputs and settings. Both methods retain
+the FAQ initialization/update and the exact evidence solvers described above;
+no questions or models are resampled during preparation. Full trajectories,
+coverage, mismatch, capped stopping times and batch timing are recorded.
+
+When sqrt-variance results are present, the combined-suite plotter writes seven
+2 × 2 comparisons: stopping time, CS width, coverage, one-step and cumulative
+RIPr KL, and one-step and cumulative betting MAE. Stopping and both one-step
+mismatch figures go under the chosen output root's `appendix_figure/`; the
+other four go under `figures/`. Without additional methods, the original
+three-figure reproduction command retains its existing behavior.
+
+### Sqrt-variance on the six fixed correctness vectors
+
+The same two methods can run on `z_1`, `z_2`, `z_3`, `tilde_z_1`,
+`tilde_z_2`, and `tilde_z_3`. Use the existing `data/benchmark_5000` labels
+and FAQ snapshot, with no new preparation or permutation. These are the same
+inputs used for the original eight-method comparison, including the preserved
+scenario random-stream IDs.
+
+From the package directory:
+
+```bash
+python nested_experiment.py run \
+  --data-dir data/benchmark_5000 --output-dir results/comparison_sqrtvar \
+  --scenarios z_1 z_2 z_3 tilde_z_1 tilde_z_2 tilde_z_3 \
+  --methods ripr_sqrtvar bet_sqrtvar --predictor faq \
+  --n-repeats 20 --repeat-start 0 --max-steps 5000 \
+  --epsilons 0.05 0.075 0.1 0.125 0.15 --seed 0 --alpha 0.05 \
+  --uniform-weight 0.05 --repeat-batch-size 8 --candidate-batch-size 256 \
+  --threads 2 --device cuda --no-plots
+python reproduce_figures.py --only comparison \
+  --comparison-results results/comparison_sqrtvar \
+  --output-dir reproduced/comparison_sqrtvar
+```
+
+For Slurm execution in the parent repository, `run_nested_fixed_z_sqrtvar.sh`
+splits this into 12 tasks (six datasets times two methods), with up to four
+concurrent tasks. Each requests one GPU, two CPUs and 16 GB RAM. Tasks 0--1,
+2--3, 4--5, 6--7, 8--9 and 10--11 correspond to the six datasets in the order
+above; even tasks run RIPr and odd tasks run betting. Results go into
+`logs/synthetic/nested_comparison_sqrtvar_5000_parts/`, separate from the
+original comparison. The 17-hour limit follows the earlier launchers and
+can be changed. This launcher is cluster-specific; the command above is portable.
+
+Every task records all 5000 trajectory steps, even after reaching a stopping
+threshold, along with coverage, one-step/cumulative mismatch, stopping records,
+elimination times and timing. The querying formula, exact evidence calculation,
+and FAQ update are the same as in the preceding sqrt-variance experiments.
+
+To combine the new runs with existing eight-method runs, export both completed
+result roots and plot the merged summaries. From the package directory, using
+the result paths in the examples above:
+
+```bash
+python nested_experiment.py export --experiment comparison \
+  --results-dir results/comparison results/comparison_sqrtvar \
+  --output-dir reproduced/comparison_with_sqrtvar/data
+python reproduce_figures.py --only comparison \
+  --data-dir reproduced/comparison_with_sqrtvar/data \
+  --output-dir reproduced/comparison_with_sqrtvar
+```
+
+For Slurm outputs, replace those two result roots with
+`../logs/synthetic/nested_comparison_5000_parts` and
+`../logs/synthetic/nested_comparison_sqrtvar_5000_parts`. Export uses a new
+destination and does not modify either source. This produces the three-panel
+stopping, width, RIPr KL and betting MAE figures, plus the six-panel (3 x 2)
+paired stopping comparison. Full raw trajectories retain the additional metrics
+not included in these figures. When sqrt-variance results are present, the plotter
+also writes six-panel (3 x 2) width, RIPr KL and betting MAE comparisons, for eight
+figures in total. Each paired figure places `z_i` on the left and `tilde_z_i` on
+the right. Sqrt-variance uses diamond markers; all curves retain the existing
+family colors and solid lines. The recorded ten-method results are now bundled
+under `data/comparison_sqrtvar/`; Figure 14 can be redrawn directly as described
+in the numbered-figure section above.
 
 ### Run separate methods or repeat batches
 

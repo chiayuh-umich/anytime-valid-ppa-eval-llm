@@ -28,17 +28,20 @@ METHODS = {
     "ripr_uniform": ("RIPr uniform", "#332288", "o"),
     "ripr_maxmin": ("RIPr max-min", "#332288", "s"),
     "ripr_maxmax": ("RIPr max-max", "#332288", "X"),
+    "ripr_sqrtvar": ("RIPr sqrt-variance", "#332288", "D"),
     "bet_uniform": ("Betting uniform", "#D55E00", "o"),
     "bet_maxmin": ("Betting max-min", "#D55E00", "s"),
     "bet_maxmax": ("Betting max-max", "#D55E00", "X"),
+    "bet_sqrtvar": ("Betting sqrt-variance", "#D55E00", "D"),
     "hedged_uniform": ("Hedged-CS uniform", "#555555", "v"),
     "hedged_wor": ("Hedged-WoR uniform", "#AA4499", "P"),
 }
+ORIGINAL_METHODS = tuple(m for m in METHODS if not m.endswith("_sqrtvar"))
 BASELINES = ("hedged_uniform", "hedged_wor")
 M2_SCENARIOS = tuple(f"m2_row_{row:04d}" for row in (1183, 1506, 483, 542))
 BBH_M2_SCENARIOS = tuple(f"m2_row_{row:04d}" for row in (788, 1752, 1516, 729))
 EXPERIMENTS = ("comparison", "validity", "mismatch", "m2_comparison", "validity_r800",
-               "bbh_m2_comparison")
+               "bbh_m2_comparison", "comparison_sqrtvar", "bbh_m2_sqrtvar")
 # Fixed paper numbering, independent of which files already exist on disk.
 PAPER_FIGURES = {
     "width_vs_theory_rate_combined": "main_figure/1_width_vs_theory_rate",
@@ -54,6 +57,8 @@ PAPER_FIGURES = {
     "stopping_time_bbh_m2_comparison": "appendix_figure/stopping_time_bbh_m2_comparison",
     "one_step_kl_query_bbh_m2_comparison": "appendix_figure/one_step_kl_query_bbh_m2_comparison",
     "one_step_mae_bbh_m2_comparison": "appendix_figure/one_step_mae_bbh_m2_comparison",
+    "stopping_time_z123_sqrtvar": "main_figure/14_stopping_time_z123",
+    "stopping_time_bbh_m2_sqrtvar": "appendix_figure/15_stopping_time_bbh_m2_comparison",
 }
 VALIDITY_LABELS = {
     "z_2": r"$z_2$",
@@ -138,7 +143,7 @@ def save_figure(fig, output, stem):
     return stem
 
 
-def plot_comparison(step, stop, output, kind, paired=False):
+def plot_comparison(step, stop, output, kind, paired=False, stem=None):
     """Stopping, width, MAE or query-weighted KL; three or six panels."""
     panels = [(f"{prefix}z_{i}", r"\tilde{z}" if prefix else "z", i)
               for i in (1, 2, 3)
@@ -193,7 +198,7 @@ def plot_comparison(step, stop, output, kind, paired=False):
         axes[0].set_ylim(bottom=0)
     for ax in axes[::shape[1]]:
         ax.set_ylabel(ylabel, fontsize=12)
-    return save_figure(fig, output, f"{prefix}_{'paired_' if paired else ''}z123")
+    return save_figure(fig, output, stem or f"{prefix}_{'paired_' if paired else ''}z123")
 
 
 def coverage_intervals(step):
@@ -211,10 +216,13 @@ def coverage_intervals(step):
     return step
 
 
-def plot_m2_comparison(step, stop, output, scenarios=M2_SCENARIOS,
-                       kinds=None, suffix="m2_comparison"):
-    """Four matched M2 models; all methods remain separate in each model panel."""
+def validate_m2_comparison(step, stop, scenarios=M2_SCENARIOS):
+    """Keep old eight-method plots valid; added methods must cover all models."""
     step, stop = (select_faq(frame, scenarios) for frame in (step, stop))
+    methods = set(step.method)
+    if (not set(ORIGINAL_METHODS).issubset(methods) or not methods.issubset(METHODS)
+            or set(stop.method) != methods):
+        raise ValueError("M2 comparison needs the original eight methods and matched known additions")
     for frame, xcol in ((step, "step"), (stop, "epsilon")):
         if frame.duplicated(["scenario", "method", xcol]).any():
             raise ValueError("Ambiguous M2 regimes; expected one regime per method")
@@ -224,7 +232,7 @@ def plot_m2_comparison(step, stop, output, scenarios=M2_SCENARIOS,
         expected_x = np.arange(1, int(frame.horizon.iloc[0]) + 1) if xcol == "step" else np.array(
             sorted(frame.epsilon.unique()))
         for scenario, group in frame.groupby("scenario"):
-            if set(group.method) != set(METHODS):
+            if set(group.method) != methods:
                 raise ValueError(f"Missing M2 methods for {scenario}")
             for method, values in group.groupby("method"):
                 if not np.array_equal(values.sort_values(xcol)[xcol].to_numpy(), expected_x):
@@ -234,7 +242,37 @@ def plot_m2_comparison(step, stop, output, scenarios=M2_SCENARIOS,
         for column in ("z_sha256", "theta_star", "n_repeats", "n_questions", "horizon", "alpha"):
             if pd.concat([s[column], t[column]]).nunique() != 1:
                 raise ValueError(f"Step and stopping data disagree on {column} for {scenario}")
+    return step, stop
 
+
+def validate_sqrtvar_comparison(step, stop, scenarios):
+    """Numbered sqrt-variance figures require all ten methods and complete grids."""
+    step, stop = (select_faq(frame, scenarios) for frame in (step, stop))
+    for frame, xcol in ((step, "step"), (stop, "epsilon")):
+        if frame.duplicated(["scenario", "method", xcol]).any():
+            raise ValueError("Duplicate sqrt-variance comparison points")
+        if frame.n_repeats.isna().any() or frame.n_repeats.nunique() != 1:
+            raise ValueError("Sqrt-variance comparison requires equal repeat counts")
+        expected_x = (np.arange(1, int(frame.horizon.iloc[0]) + 1) if xcol == "step"
+                      else np.array(sorted(frame.epsilon.unique())))
+        for scenario, group in frame.groupby("scenario"):
+            if set(group.method) != set(METHODS):
+                raise ValueError(f"All ten methods are required for {scenario}")
+            for method, values in group.groupby("method"):
+                if not np.array_equal(values.sort_values(xcol)[xcol].to_numpy(), expected_x):
+                    raise ValueError(f"Incomplete {xcol} grid for {scenario}/{method}")
+    for scenario in scenarios:
+        combined = pd.concat([step[step.scenario == scenario], stop[stop.scenario == scenario]])
+        for column in ("z_sha256", "theta_star", "n_repeats", "n_questions", "horizon", "alpha"):
+            if combined[column].isna().any() or combined[column].nunique() != 1:
+                raise ValueError(f"Inconsistent {column} for {scenario}")
+    return step, stop
+
+
+def plot_m2_comparison(step, stop, output, scenarios=M2_SCENARIOS,
+                       kinds=None, suffix="m2_comparison"):
+    """Four matched M2 models; all methods remain separate in each model panel."""
+    step, stop = validate_m2_comparison(step, stop, scenarios)
     step = coverage_intervals(step)
     ripr_steps = step[step.method.str.startswith("ripr_")]
     bet_steps = step[step.method.str.startswith("bet_")]
@@ -504,12 +542,28 @@ def main():
                         help="Use a new standalone tilde_z_2 / betting-uniform validity run")
     parser.add_argument("--m2-results", dest="m2_comparison_results", type=Path, nargs="+",
                         help="One or more completed M2 run directories containing all four models")
+    parser.add_argument("--m2-additional-results", type=Path, nargs="+",
+                        help="Append new methods to the bundled (or --m2-results) MMLU-Pro comparison; duplicate cases are rejected")
     parser.add_argument("--bbh-m2-results", dest="bbh_m2_comparison_results", type=Path, nargs="+",
                         help="Completed combined-suite runs for rows 788, 1752, 1516 and 729")
+    parser.add_argument("--bbh-m2-additional-results", type=Path, nargs="+",
+                        help="Append new methods to the bundled (or --bbh-m2-results) combined-suite comparison")
+    parser.add_argument("--comparison-sqrtvar-results", type=Path, nargs="+",
+                        help="Use completed ten-method run(s) instead of bundled Figure 14 data")
+    parser.add_argument("--bbh-m2-sqrtvar-results", type=Path, nargs="+",
+                        help="Use completed ten-method run(s) instead of bundled Figure 15 data")
     args = parser.parse_args()
     if args.anchor_step < 1:
         parser.error("--anchor-step must be positive")
     cases = EXPERIMENTS if args.only == "all" else (args.only,)
+    additions = {
+        "m2_comparison": (args.m2_additional_results, M2_SCENARIOS, "--m2-additional-results"),
+        "bbh_m2_comparison": (args.bbh_m2_additional_results, BBH_M2_SCENARIOS,
+                              "--bbh-m2-additional-results"),
+    }
+    for case, (paths, _, flag) in additions.items():
+        if paths and case not in cases:
+            parser.error(f"{flag} requires --only {case} or --only all")
     if any(getattr(args, f"{case}_results") is None for case in cases):
         verify_data(args.data_dir)
     output = args.output_dir / "figures"
@@ -519,10 +573,24 @@ def main():
     for case in cases:
         step, stop, sources = read_summaries(args.data_dir / case, getattr(args, f"{case}_results"))
         provenance[case] = sources
+        paths, allowed_scenarios, _ = additions.get(case, (None, (), None))
+        if paths:
+            extra_step, extra_stop, extra_sources = read_summaries(
+                args.data_dir / case, paths)
+            if not set(extra_step.scenario).issubset(allowed_scenarios):
+                raise ValueError(f"Additional {case} results must use its four comparison models")
+            step = pd.concat([step, extra_step], ignore_index=True)
+            stop = pd.concat([stop, extra_stop], ignore_index=True)
+            sources.update({f"additional/{name}": value for name, value in extra_sources.items()})
         if case == "comparison":
             for kind in ("stopping", "width", "mae", "kl"):
                 files.append(plot_comparison(step, stop, output, kind))
             files.append(plot_comparison(step, stop, output, "stopping", paired=True))
+            # New querying comparisons include diagnostics for all six vectors;
+            # the archived eight-method reproduction keeps its five figures.
+            if step.method.str.endswith("_sqrtvar").any():
+                for kind in ("width", "mae", "kl"):
+                    files.append(plot_comparison(step, stop, output, kind, paired=True))
         elif case == "validity":
             files.extend(plot_validity(step, output))
         elif case == "validity_r800":
@@ -534,8 +602,20 @@ def main():
         elif case == "m2_comparison":
             files.extend(plot_m2_comparison(step, stop, output))
         elif case == "bbh_m2_comparison":
+            # Keep the three archived paper plots as the default; new querying
+            # comparisons also show width, coverage and cumulative mismatch.
+            kinds = None if step.method.str.endswith("_sqrtvar").any() else ("stopping", "kl", "mae")
             files.extend(plot_m2_comparison(step, stop, output, scenarios=BBH_M2_SCENARIOS,
-                         kinds=("stopping", "kl", "mae"), suffix="bbh_m2_comparison"))
+                         kinds=kinds, suffix="bbh_m2_comparison"))
+        elif case == "comparison_sqrtvar":
+            step, stop = validate_sqrtvar_comparison(step, stop, ("z_1", "z_2", "z_3"))
+            files.append(plot_comparison(step, stop, output, "stopping",
+                                        stem="stopping_time_z123_sqrtvar"))
+            stop.to_csv(output / "14_stopping_time_z123_values.csv", index=False)
+        elif case == "bbh_m2_sqrtvar":
+            step, stop = validate_sqrtvar_comparison(step, stop, BBH_M2_SCENARIOS)
+            files.extend(plot_m2_comparison(step, stop, output, scenarios=BBH_M2_SCENARIOS,
+                         kinds=("stopping",), suffix="bbh_m2_sqrtvar"))
         else:
             files.append(plot_mismatch(step, output, args.anchor_step))
     figure_files = {stem: {ext: figure_path(output, stem).with_suffix(f".{ext}").relative_to(

@@ -8,7 +8,7 @@ This runner uses float64 and its existing [1e-6, 1-1e-6] probability clipping.
 See LICENSE-FAQ for the upstream Apache-2.0 license.
 
 RIPr, testing-by-betting, Hedged-CS and Hedged-WoR; uniform / max-min /
-max-max querying; FAQ, controlled oracle and custom predictors.
+max-max / sqrt-variance querying; FAQ, controlled oracle and custom predictors.
 All numerical solvers are defined here. See README.md for reproduction commands.
 """
 
@@ -673,6 +673,25 @@ def with_uniform_floor(scores, uniform_weight):
     return (1.0 - eta) * (scores / totals) + eta / scores.shape[-1]
 
 
+def sqrtvar_distribution(predictions, uniform_weight=0.05):
+    """O(N) predictable querying, with the same eta/N floor as max-min.
+
+    Only the pre-query predictions enter q. This rule is independent of CS
+    endpoints and continues even after a repeat's CS becomes empty. Solvers
+    still use the existing conservative betting bounds based on h=eta/N.
+    """
+    eta = validate_uniform_weight(uniform_weight)
+    p = predictions.detach().to(dtype=torch.float64)
+    if p.ndim != 2 or min(p.shape) < 1:
+        raise ValueError("predictions must have shape (repeats, questions).")
+    if not torch.isfinite(p).all() or (p <= 0).any() or (p >= 1).any():
+        raise ValueError("sqrt-variance predictions must lie strictly in (0,1).")
+    scores = (p * (1.0 - p)).sqrt()
+    q = with_uniform_floor(scores, eta)
+    h = torch.full((p.shape[0],), eta / p.shape[1], dtype=p.dtype, device=p.device)
+    return q, h
+
+
 def _endpoint_models(family, p, q, lower, upper, h):
     """Both endpoint values and their q derivatives, without choosing an active end."""
     targets = torch.stack([lower, upper], dim=1)
@@ -1190,18 +1209,20 @@ METHODS = {
     "ripr_uniform": ("RIPr uniform", "#332288", "o"),
     "ripr_maxmin": ("RIPr max-min", "#332288", "s"),
     "ripr_maxmax": ("RIPr max-max", "#332288", "X"),
+    "ripr_sqrtvar": ("RIPr sqrt-variance", "#332288", "D"),
     "bet_uniform": ("Betting uniform", "#D55E00", "o"),
     "bet_maxmin": ("Betting max-min", "#D55E00", "s"),
     "bet_maxmax": ("Betting max-max", "#D55E00", "X"),
+    "bet_sqrtvar": ("Betting sqrt-variance", "#D55E00", "D"),
     "hedged_uniform": ("Hedged-CS uniform", "#555555", "v"),
     "hedged_wor": ("Hedged-WoR uniform", "#AA4499", "P"),
 }
 
 
-DEFAULT_METHODS = tuple(m for m in METHODS if not m.endswith("_maxmax"))
+DEFAULT_METHODS = tuple(m for m in METHODS if not m.endswith(("_maxmax", "_sqrtvar")))
 
 
-QUERY_POLICIES = ("uniform", "maxmin", "maxmax")
+QUERY_POLICIES = ("uniform", "maxmin", "maxmax", "sqrtvar")
 
 
 BASELINE_METHODS = ("hedged_uniform", "hedged_wor")
@@ -1495,7 +1516,9 @@ def simulate(z, predictor, family, policy, uniforms, args, progress_label=""):
         q = torch.full_like(p, 1 / n)
         h = torch.full((repeats,), 1 / n, dtype=z.dtype, device=z.device)
         iterations, evaluations = torch.zeros_like(h), torch.zeros_like(h)
-        if policy in ("maxmin", "maxmax") and nonempty.any():
+        if policy == "sqrtvar":
+            q, h = sqrtvar_distribution(p, args.uniform_weight)
+        elif policy in ("maxmin", "maxmax") and nonempty.any():
             optimizer = maxmax_distribution if policy == "maxmax" else maxmin_distribution
             q_live, h_live, info = optimizer(
                 p[nonempty], lower[nonempty], upper[nonempty], family,
@@ -1722,7 +1745,8 @@ def run(args):
                   width_definition="max(active)-min(active); empty diameter=0 but empty is not a precision hit",
                   stopping_definition="first nonempty nested CS with full width <= epsilon, capped at max_steps",
                   betting_range="full valid range (same as existing implementation)",
-                  querying="uniform, endpoint max-min, or endpoint max-max; nested CS endpoints; uniform after empty CS",
+                  querying="uniform, endpoint max-min/max-max, or sqrt-variance; max-min/max-max use nested CS endpoints and uniform after empty CS; sqrt-variance is independent of CS state",
+                  sqrtvar_definition="q=(1-eta)*sqrt(r*(1-r))/sum_i sqrt(r_i*(1-r_i))+eta/N; eta=uniform_weight; pre-query r; h=eta/N; exact evidence solvers; no query optimization",
                   maxmax_definition="max_q max(G(q,L),G(q,U)); independent endpoint multistart searches, then re-score both candidates on both endpoints; same eta/N floor and betting range as max-min",
                   sampling={m: "uniform_without_replacement" if m == "hedged_wor"
                             else "with_replacement" for m in args.methods},
@@ -2217,7 +2241,7 @@ def plot_results(root, output, anchor_step=1000, *, show_repeat_counts=False):
         uncertainty="pointwise 95% Clopper-Pearson for coverage; +/-1 SE otherwise",
         footnotes_shown=False,
         repeat_counts_in_legends=show_repeat_counts,
-        method_style="family color: RIPr purple, betting orange; policy: uniform solid, max-min solid with square markers, max-max solid with X markers; Hedged baselines retain their own colors",
+        method_style="family color: RIPr purple, betting orange; policy: uniform solid, max-min solid with square markers, max-max solid with X markers, sqrt-variance solid with diamond markers; Hedged baselines retain their own colors",
         stopping="mean min(stopping time,horizon); hollow markers indicate some repeats did not reach a nonempty target",
         empty_cs="empty-set diameter is zero but does not count as a precision hit; see empty_cs figures",
         hedged_baseline="one run per scenario per baseline: hedged_uniform (WR), hedged_wor (WoR); reused across predictor regimes only for display; no predictor mismatch metric",
@@ -2248,7 +2272,7 @@ def parse_args(argv=None):
     run_parser.add_argument("--scenarios", nargs="+", type=canonical_scenario,
                             help="z_1 z_2 z_3 tilde_z_1 tilde_z_2 tilde_z_3, or prepared M2 names")
     run_parser.add_argument("--methods", nargs="+", choices=list(METHODS), default=list(DEFAULT_METHODS),
-                            help="Methods to run; max-max variants are opt-in")
+                            help="Methods to run; max-max and sqrt-variance variants are opt-in")
     run_parser.add_argument("--predictor", choices=("faq", "oracle", "custom"), default="faq")
     run_parser.add_argument("--predictor-factory", help="Python file:factory, receiving one context dictionary")
     run_parser.add_argument("--predictor-kwargs", default="{}", help="JSON parameters passed to custom factory")
